@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<realEstateData>
+    <property>
+        <id>1</id>
+        <phoneNumber>123456789</phoneNumber>
+        <district>Центральный район</district>
+    </property>
+    <property>
+        <id>2</id>
+        <phoneNumber>987654321</phoneNumber>
+        <district>Зеленый Луг</district>
+    </property>
+    <property>
+        <id>3</id>
+        <phoneNumber>456789012</phoneNumber>
+        <district>Ленинский район</district>
+    </property>
+    <!-- Add more property entries as needed -->
+</realEstateData>

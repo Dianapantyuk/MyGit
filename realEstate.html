@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Real Estate Report</title>
+</head>
+<body>
+
+<h1>Real Estate Listings</h1>
+
+<table id="realEstateTable" border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Phone Number</th>
+        <th>District</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div>
+    <label for="idInput">ID:</label>
+    <input type="text" id="idInput">
+
+    <label for="phoneNumberInput">Phone Number:</label>
+    <input type="text" id="phoneNumberInput">
+
+    <label for="districtSelect">District:</label>
+    <select id="districtSelect">
+        <option value="Центральный район">Центральный район</option>
+        <option value="Зеленый Луг">Зеленый Луг</option>
+        <option value="Ленинский район">Ленинский район</option>
+        <option value="Советский район">Советский район</option>
+        <option value="Московский район">Московский район</option>
+        <option value="Заводской район">Заводской район</option>
+        <option value="Лосиноостровский район">Лосиноостровский район</option>
+    </select>
+
+    <button onclick="addProperty()">Add Property</button>
+</div>
+
+<button onclick="convertToGrade()">Convert to Grade</button>
+<button onclick="convertToDistrict()">Convert to District</button>
+
+<script>
+    // Global variable to store original district values
+    var originalDistrictValues = [];
+    // Global variable to store unique IDs
+    var uniqueIds = [];
+
+    document.addEventListener('DOMContentLoaded', function () {
+        loadRealEstateData();
+    });
+
+    function loadRealEstateData() {
+        // Assuming you have data for real estate properties
+        var realEstateData = [
+            { id: 1, phoneNumber: '123456789', district: 'Центральный район' },
+            { id: 2, phoneNumber: '987654321', district: 'Зеленый Луг' },
+            { id: 3, phoneNumber: '456789012', district: 'Ленинский район' }
+            // Add more data as needed
+        ];
+
+        var table = document.getElementById('realEstateTable');
+
+        realEstateData.forEach(function (property) {
+            // Save original district values
+            originalDistrictValues.push({ id: property.id, district: property.district });
+            // Save unique IDs
+            uniqueIds.push(property.id);
+
+            var row = table.insertRow(-1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+
+            cell1.textContent = property.id;
+            cell2.textContent = property.phoneNumber;
+            cell3.textContent = property.district;
+        });
+    }
+
+    function addProperty() {
+        var table = document.getElementById('realEstateTable');
+        var idInput = document.getElementById('idInput').value;
+        var phoneNumberInput = document.getElementById('phoneNumberInput').value;
+        var districtSelect = document.getElementById('districtSelect');
+        var selectedDistrict = districtSelect.options[districtSelect.selectedIndex].value;
+
+        // Check if idInput and phoneNumberInput are numbers
+        if (!isNumeric(idInput) || !isNumeric(phoneNumberInput)) {
+            showAlert("ID and Phone Number must be numeric.");
+            return;
+        }
+
+        // Check if ID is unique
+        if (uniqueIds.includes(parseInt(idInput))) {
+            showAlert("ID must be unique.");
+            return;
+        }
+
+        // Save original district value
+        originalDistrictValues.push({ id: idInput, district: selectedDistrict });
+        // Save unique ID
+        uniqueIds.push(parseInt(idInput));
+
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+
+        cell1.textContent = idInput;
+        cell2.textContent = phoneNumberInput;
+        cell3.textContent = selectedDistrict;
+
+        // Clear input fields
+        document.getElementById('idInput').value = '';
+        document.getElementById('phoneNumberInput').value = '';
+        document.getElementById('districtSelect').selectedIndex = 0; // Set the default option
+    }
+
+    function convertToGrade() {
+        var table = document.getElementById('realEstateTable');
+        var rows = table.getElementsByTagName('tr');
+
+        for (var i = 1; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName('td');
+            var district = cells[2].textContent.trim();
+
+            // Replace district names with grades
+            switch (district) {
+                case 'Центральный район':
+                case 'Зеленый Луг':
+                    cells[2].textContent = 'ХОРОШО';
+                    break;
+                case 'Советский район':
+                case 'Первомайский район':
+                case 'Московский район':
+                    cells[2].textContent = 'СРЕДНЕ';
+                    break;
+                case 'Ленинский район':
+                case 'Заводской район':
+                case 'Лосиноостровский район':
+                    cells[2].textContent = 'ПЛОХО';
+                    break;
+            }
+        }
+    }
+
+    function convertToDistrict() {
+        var table = document.getElementById('realEstateTable');
+        var rows = table.getElementsByTagName('tr');
+
+        for (var i = 1; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName('td');
+            var grade = cells[2].textContent.trim();
+
+            // Replace grades with district names
+            switch (grade) {
+                case 'ХОРОШО':
+                    cells[2].textContent = 'Центральный район';
+                    break;
+                case 'СРЕДНЕ':
+                    cells[2].textContent = 'Советский район';
+                    break;
+                case 'ПЛОХО':
+                    cells[2].textContent = 'Ленинский район';
+                    break;
+            }
+        }
+    }
+
+    function isNumeric(value) {
+        return /^\d+$/.test(value);
+    }
+
+    function showAlert(message) {
+        alert(message);
+    }
+</script>
+
+</body>
+</html>
+
+
